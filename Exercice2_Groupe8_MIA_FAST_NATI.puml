@@ -1,0 +1,70 @@
+@startuml
+
+' =========================
+' Enumeration du niveau
+' =========================
+
+enum Niveau {
+  L1
+  L2
+  L3
+}
+
+' =========================
+' Classes
+' =========================
+
+class Etudiant {
+  - id : int
+  - nom : String
+  - niveau : Niveau
+  - filiere : Filiere
+  - notes : List<Note>
+  + ajouterNote(note : Note) : void
+  + calculerMoyenne() : float
+  + validerUE(ue : UE) : boolean
+  + afficherReleve() : void
+}
+
+class Filiere {
+  - code : String
+  - libelle : String
+  - niveau : Niveau
+  - ues : List<UE>
+  + ajouterUE(ue : UE) : void
+}
+
+class UE {
+  - code : String
+  - libelle : String
+  - credits : int
+  - matieres : List<Matiere>
+  + ajouterMatiere(matiere : Matiere) : void
+  + calculerMoyenne(notes : List<Note>) : float
+  + estValidee(notes : List<Note>) : boolean
+}
+
+class Matiere {
+  - code : String
+  - libelle : String
+  - coefficient : float
+}
+
+class Note {
+  - valeur : float
+  - session : String
+  - matiere : Matiere
+  + estValide() : boolean
+}
+
+' =========================
+' Relations et multiplicites
+' =========================
+
+Etudiant "0..*" --> "1" Filiere : appartient a
+Filiere "1" o-- "1..*" UE : contient
+UE "1" *-- "1..*" Matiere : composee de
+Etudiant "1" *-- "0..*" Note : obtient
+Note "0..*" --> "1" Matiere : concerne
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+
+title Programmation d'une seance de TD
+autonumber
+
+actor "Responsable TD" as Responsable
+boundary "Plateforme TD" as Plateforme
+entity "Groupe TD" as Groupe
+entity Salle
+entity Enseignant
+
+Responsable -> Plateforme : saisir les informations de la seance
+Plateforme -> Groupe : verifier le groupe
+Groupe --> Plateforme : groupe valide
+
+Plateforme -> Salle : verifier la disponibilite
+Salle --> Plateforme : disponibilite de la salle
+
+Plateforme -> Enseignant : verifier la disponibilite
+Enseignant --> Plateforme : disponibilite de l'enseignant
+
+alt Salle et enseignant disponibles
+    Plateforme -> Salle : reserver la salle
+    Plateforme -> Enseignant : affecter la seance
+    Plateforme -> Groupe : associer la seance
+    Plateforme --> Responsable : confirmer la programmation
+else Conflit de salle ou d'enseignant
+    Plateforme --> Responsable : signaler le conflit
+    Plateforme --> Responsable : proposer un autre creneau
+end
+
+@enduml

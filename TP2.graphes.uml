@@ -1,0 +1,85 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class Etudiant {
+  - matricule : String
+  - nom : String
+  - email : String
+  + consulterCalendrier() : void
+  + consulterBilan() : void
+}
+
+class Matiere {
+  - code : String
+  - libelle : String
+  + enregistrer() : void
+}
+
+class GroupeTD {
+  - code : String
+  - niveau : String
+  - capacite : int
+  - etudiants : List<Etudiant>
+  + ajouterEtudiant(etudiant : Etudiant) : void
+  + retirerEtudiant(etudiant : Etudiant) : void
+}
+
+class SeanceTD {
+  - id : int
+  - date : Date
+  - heureDebut : Time
+  - heureFin : Time
+  - statut : String
+  + programmer() : void
+  + annuler() : void
+  + enregistrerPresence() : void
+}
+
+class Enseignant {
+  - id : int
+  - nom : String
+  - specialite : String
+  + verifierDisponibilite(creneau : Creneau) : boolean
+  + animer(seance : SeanceTD) : void
+}
+
+class Salle {
+  - numero : String
+  - capacite : int
+  - localisation : String
+  + estDisponible(creneau : Creneau) : boolean
+}
+
+class Presence {
+  - id : int
+  - statut : StatutPresence
+  - dateEnregistrement : DateTime
+  + marquerPresent() : void
+  + marquerAbsent() : void
+}
+
+enum StatutPresence {
+  PRESENT
+  ABSENT
+  RETARD
+}
+
+class Creneau {
+  - date : Date
+  - heureDebut : Time
+  - heureFin : Time
+}
+
+GroupeTD "1" o-- "1..*" Etudiant : regroupe
+GroupeTD "1" --> "1" Matiere : concerne
+GroupeTD "1" *-- "0..*" SeanceTD : planifie
+SeanceTD "0..*" --> "1" Enseignant : animee par
+SeanceTD "0..*" --> "1" Salle : se deroule dans
+SeanceTD "0..*" --> "1" Creneau : utilise
+Presence "0..*" --> "1" Etudiant : concerne
+Presence "0..*" --> "1" SeanceTD : enregistree pour
+Salle --> Creneau : disponibilite
+Enseignant --> Creneau : disponibilite
+
+@enduml
